@@ -74,7 +74,7 @@ function update_array_promise_to_table_row (promise, table_id, html_content_func
         });
 
         $(table_id).html (html_content);
-    })    
+    })
 }
 
 function check_all_request_get_response () {

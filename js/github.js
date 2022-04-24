@@ -51,7 +51,23 @@ function get_pr_by_url (url) {
 }
 
 function get_open_pr_by_id (user_id) {
-    let query  = `is:pr+author:${user_id}&sort=updated&order=dsc`;
+    let query  = `is:pr-is:merged+author:${user_id}&sort=updated&order=dsc`;
+    let url    = `${GITHUB_API_URL}${GITHUB_ISSUE_API}?q=${query}`;
+    let result = new Array ()
+
+    let [status, data] = send_request ('GET', url, GITHUB_HEADER);
+
+    if (status === STATUS_SUCCESS) {
+        result = data.items;
+    } else {
+        console.log (`[ERROR] Fail to get the data! (status: ${status})`);
+    }
+
+    return result;
+}
+
+function get_closed_pr_by_id (user_id) {
+    let query  = `is:pr+is:closed+author:${user_id}&sort=updated&order=dsc`;
     let url    = `${GITHUB_API_URL}${GITHUB_ISSUE_API}?q=${query}`;
     let result = new Array ()
 
@@ -68,6 +84,24 @@ function get_open_pr_by_id (user_id) {
 
 async function get_self_open_pr () {
     let data = get_open_pr_by_id (GITHUB_ID);
+    let self_open_pr = new Array ()
+    let pr_result = await Promise.all (
+        data.map ((value, key) => {
+            //
+            // Do the async requests to get all PR information at same time.
+            // So the result for this promise is not the corrected one.
+            //
+            let url = value.pull_request.url;
+            self_open_pr.push (url)
+            return send_request ('GET', url, GITHUB_HEADER, data={}, async=true);
+        })
+    );
+
+    return self_open_pr
+}
+
+async function get_self_closed_pr () {
+    let data = get_closed_pr_by_id (GITHUB_ID);
     let self_open_pr = new Array ()
     let pr_result = await Promise.all (
         data.map ((value, key) => {

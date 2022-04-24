@@ -30,6 +30,10 @@
 
  */
 
+function url (url) {
+    window.open(url, '_blank');
+}
+
 function get_html_row_data_self_open_pr (pr_data) {
     let pr_num      = pr_data.number;
     let pr_link     = pr_data.html_url;
@@ -56,3 +60,35 @@ function get_html_row_data_self_open_pr (pr_data) {
     
     return table_row;
 }
+
+function get_html_row_data_self_closed_pr (pr_data) {
+  let pr_num      = pr_data.number;
+  let pr_link     = pr_data.html_url;
+  let title       = pr_data.title;
+  let author      = pr_data.user.login;
+  let author_link = pr_data.user.html_url;
+  let base_branch = pr_data.base.ref;
+  let update_date = pr_data.updated_at;
+  let state       = pr_data.state;
+  let repo        = pr_data.base.repo.name;
+  let repo_link   = pr_data.base.repo.html_url;
+
+  let table_row = `
+        <tr>
+            <th scope="row" class="clickable-td" href="${pr_link}">${pr_num}</th>
+            <td class="clickable-td" href="${pr_link}">${title}</td>
+            <td class="clickable-td" href="${repo_link}">${repo}</td>
+            <td class="clickable-td" href="${repo_link}/tree/${base_branch}">${base_branch}</td>
+            <td>${state}</td>
+            <td>${update_date}</td>
+            <td class="clickable-td" href="${author_link}">${author}</td>
+        </tr>
+        `
+  
+  return table_row;
+}
+
+$(document).on('click', '.clickable-td', function () {
+  let url = $(this).attr('href');
+  window.open(url, '_blank');
+});

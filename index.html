@@ -63,21 +63,38 @@
     </header>
 
     <div class="container">
+        <h2> Self Open PR </h2>
         <table class="table">
             <thead>
-              <tr>
-                <th scope="col">PR#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Repo</th>
-                <th scope="col">Branch</th>
-                <th scope="col">State</th>
-                <th scope="col">Update</th>
-                <th scope="col">Author</th>
-              </tr>
+                <tr>
+                    <th scope="col">PR#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Repo</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Author</th>
+                </tr>
             </thead>
             <tbody id='self_open_pr_content'>
             </tbody>
-          </table>
+        </table>
+        <h2> Self Closed PR </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">PR#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Repo</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Author</th>
+                </tr>
+            </thead>
+            <tbody id='self_closed_pr_content'>
+            </tbody>
+        </table>
     </div>
 
     <!-- 
@@ -99,7 +116,9 @@
     <script src="./js/index.js"></script>
     <script>
         (() => {
-            let self_open_pr = get_self_open_pr ();     // This is async function
+            let self_open_pr   = get_self_open_pr ();       // This is async function
+            let self_closed_pr = get_self_closed_pr ();     // This is async function
+
             let update_table_content = () => {
                     if (check_all_request_get_response ()) {
                         clearInterval (update_table_timer);
@@ -107,14 +126,10 @@
                         // Update the self open PR content
                         //
                         update_array_promise_to_table_row (self_open_pr, '#self_open_pr_content', get_html_row_data_self_open_pr);
+                        update_array_promise_to_table_row (self_closed_pr, '#self_closed_pr_content', get_html_row_data_self_closed_pr);
                     }
                 };
             let update_table_timer = setInterval(update_table_content, 100)
-
-            $('.clickable-td').on('click', function(){
-                var myLink = $(this).attr('href');
-                window.open(myLink, '_blank');
-            });
         })();
     </script>
 </body>
