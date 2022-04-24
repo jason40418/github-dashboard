@@ -95,6 +95,22 @@
             <tbody id='request_review_pr_content'>
             </tbody>
         </table>
+        <h2> Self Reviewed Review PR </h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">PR#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Repo</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Author</th>
+                </tr>
+            </thead>
+            <tbody id='reviewed_review_pr_content'>
+            </tbody>
+        </table>
         <h2> Self Closed PR </h2>
         <table class="table">
             <thead>
@@ -132,9 +148,10 @@
     <script src="./js/index.js"></script>
     <script>
         (() => {
-            let self_open_pr   = get_self_open_pr ();       // This is async function
-            let self_closed_pr = get_self_closed_pr ();     // This is async function
-            let request_review_pr = get_request_review_pr ();     // This is async function
+            let self_open_pr      = async_get_pr_detail (query_open_pr_by_id (GITHUB_ID));             // This is async function
+            let self_closed_pr    = async_get_pr_detail (query_closed_pr_by_id (GITHUB_ID));           // This is async function
+            let request_review_pr = async_get_pr_detail (query_request_review_pr_by_id (GITHUB_ID));   // This is async function
+            let reviewed_pr       = async_get_pr_detail (query_reviewed_review_pr_by_id (GITHUB_ID));  // This is async function
 
             let update_table_content = () => {
                     if (check_all_request_get_response ()) {
@@ -142,9 +159,10 @@
                         //
                         // Update the self open PR content
                         //
-                        update_array_promise_to_table_row (self_open_pr, '#self_open_pr_content', get_html_row_data_self_open_pr);
-                        update_array_promise_to_table_row (self_closed_pr, '#self_closed_pr_content', get_html_row_data_self_closed_pr);
-                        update_array_promise_to_table_row (request_review_pr, '#request_review_pr_content', get_html_row_data_request_review_pr);
+                        update_array_promise_to_table_row (self_open_pr, '#self_open_pr_content', get_html_row_data_pr);
+                        update_array_promise_to_table_row (self_closed_pr, '#self_closed_pr_content', get_html_row_data_pr);
+                        update_array_promise_to_table_row (request_review_pr, '#request_review_pr_content', get_html_row_data_pr);
+                        update_array_promise_to_table_row (reviewed_pr, '#reviewed_review_pr_content', get_html_row_data_pr);
                     }
                 };
             let update_table_timer = setInterval(update_table_content, 100)
