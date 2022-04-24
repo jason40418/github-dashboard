@@ -29,7 +29,8 @@
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-const STATUS_SUCCESS = 200
+const STATUS_SUCCESS = 200;
+const DAY_SECOND     = 24 * 60 * 60;
 
 var gloabl_xhr_request   = 0;
 var gloabl_xhr_response  = 0;
@@ -86,5 +87,25 @@ function check_all_request_get_response () {
         return false;
     } else {
         return true;
+    }
+}
+
+function format_datetime (datetime) {
+    let input_datetime = new Date (datetime);
+    let delta = Math.abs (input_datetime.getTime() - new Date ().getTime()) / 1000;
+
+    let year  = String (input_datetime.getFullYear()).padStart(4, '0');
+    let month = String (input_datetime.getMonth()+1).padStart(2, '0');
+    let date  = String (input_datetime.getDate()).padStart(2, '0');
+
+    let hour   = String (input_datetime.getHours()).padStart(2, '0');
+    let minute = String (input_datetime.getMinutes()).padStart(2, '0');
+
+    if (delta > 365 * DAY_SECOND) {
+        return `${year}-${month}-${date}`;
+    } else if (delta > DAY_SECOND) {
+        return `${month}-${date}`;
+    } else {
+        return `${hour}:${minute}`;
     }
 }

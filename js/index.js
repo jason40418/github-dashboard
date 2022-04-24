@@ -53,7 +53,7 @@ function get_html_row_data_pr (pr_data) {
             <td class="clickable-td" href="${repo_link}">${repo}</td>
             <td class="clickable-td" href="${repo_link}/tree/${base_branch}">${base_branch}</td>
             <td>${state}</td>
-            <td>${update_date}</td>
+            <td>${format_datetime (update_date)}</td>
             <td class="clickable-td" href="${author_link}">${author}</td>
         </tr>
         `
