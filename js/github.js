@@ -52,7 +52,7 @@ function get_pr_by_url (url) {
 
 
 function query_open_pr_by_id (user_id) {
-    let query  = `is:pr-is:merged+author:${user_id}&sort=updated&order=dsc`;
+    let query  = `is:pr+is:open+author:${user_id}&sort=updated&order=dsc`;
     let url    = `${GITHUB_API_URL}${GITHUB_ISSUE_API}?q=${query}`;
     let result = new Array ()
 
